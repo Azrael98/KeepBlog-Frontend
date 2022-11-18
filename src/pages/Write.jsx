@@ -1,0 +1,290 @@
+import React, { useState } from "react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+
+import { useLocation, useNavigate } from "react-router-dom";
+import moment from "moment";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { storage } from "../firebase";
+
+const Write = () => {
+  const header = "Bearer " + JSON.parse(localStorage.getItem("user")).token;
+
+  const state = useLocation().state;
+  const [value, setValue] = useState(state?.desc || "");
+  const [title, setTitle] = useState(state?.title || "");
+  const [file, setFile] = useState(null);
+  const [cat, setCat] = useState(state?.cat || "");
+
+  const imgUrl = state?.img;
+
+  const navigate = useNavigate();
+
+  const handleClick = async (e) => {
+    e.preventDefault();
+
+    if (file !== null) {
+      const name = new Date().getTime() + file.name;
+      const storageRef = ref(storage, name);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log("Upload is " + progress + "% done");
+          switch (snapshot.state) {
+            case "paused":
+              console.log("Upload is paused");
+              break;
+            case "running":
+              console.log("Upload is running");
+              break;
+            default:
+              break;
+          }
+        },
+        (error) => {},
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+            try {
+              state
+                ? await fetch(`https://creepy-bonnet-cod.cyclic.app/api/posts/${state.id}`, {
+                    method: "PUT",
+                    mode: "cors",
+                    cache: "no-cache",
+                    credentials: "same-origin",
+                    headers: {
+                      "Content-Type": "application/json",
+                      auth: header,
+                    },
+                    redirect: "follow",
+                    referrerPolicy: "no-referrer",
+                    body: JSON.stringify({
+                      title,
+                      desc: value,
+                      cat,
+                      img: file ? downloadURL : imgUrl,
+                    }),
+                  })
+                : await fetch("https://creepy-bonnet-cod.cyclic.app/api/posts", {
+                    method: "POST",
+                    mode: "cors",
+                    cache: "no-cache",
+                    credentials: "same-origin",
+                    headers: {
+                      "Content-Type": "application/json",
+                      auth: header,
+                    },
+                    redirect: "follow",
+                    referrerPolicy: "no-referrer",
+                    body: JSON.stringify({
+                      title,
+                      desc: value,
+                      cat,
+                      img: file ? downloadURL : "",
+                      date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
+                    }),
+                  });
+              navigate("/");
+            } catch (err) {
+              console.log(err);
+            }
+          });
+        }
+      );
+    }
+    state
+      ? await fetch(`https://creepy-bonnet-cod.cyclic.app/api/posts/${state.id}`, {
+          method: "PUT",
+          mode: "cors",
+          cache: "no-cache",
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/json",
+            auth: header,
+          },
+          redirect: "follow",
+          referrerPolicy: "no-referrer",
+          body: JSON.stringify({
+            title,
+            desc: value,
+            cat,
+            img: imgUrl,
+          }),
+        })
+      : await fetch("https://creepy-bonnet-cod.cyclic.app/api/posts", {
+          method: "POST",
+          mode: "cors",
+          cache: "no-cache",
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/json",
+            auth: header,
+          },
+          redirect: "follow",
+          referrerPolicy: "no-referrer",
+          body: JSON.stringify({
+            title,
+            desc: value,
+            cat,
+            img: "",
+            date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
+          }),
+        });
+    navigate("/");
+  };
+
+  return (
+    <div className="add m-25">
+      <div className="content">
+        <input
+          type="text"
+          placeholder="Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <div className="editorContainer">
+          <ReactQuill
+            className="editor"
+            theme="snow"
+            value={value}
+            onChange={setValue}
+          />
+        </div>
+      </div>
+      <div className="menu">
+        <div className="item">
+          <h1>Publish</h1>
+          <span>
+            <b>Status: </b> Draft
+          </span>
+          <span>
+            <b>Visibility: </b> Public
+          </span>
+          <input
+            style={{ display: "none" }}
+            type="file"
+            id="file"
+            name="file"
+            onChange={(e) => setFile(e.target.files[0])}
+          />
+          <label className="file" htmlFor="file">
+            Upload Image
+          </label>
+          <div className="buttons">
+            <button>Save as a draft</button>
+            <button onClick={handleClick}>
+              {state ? "Update" : "Publish"}
+            </button>
+          </div>
+        </div>
+        <div className="item">
+          <h1>Category</h1>
+          <div className="cat">
+            <input
+              type="radio"
+              checked={cat === "art"}
+              name="cat"
+              value="art"
+              id="art"
+              onChange={(e) => setCat(e.target.value)}
+            />
+            <label htmlFor="art">Art</label>
+          </div>
+          <div className="cat">
+            <input
+              type="radio"
+              checked={cat === "science"}
+              name="cat"
+              value="science"
+              id="science"
+              onChange={(e) => setCat(e.target.value)}
+            />
+            <label htmlFor="science">Science</label>
+          </div>
+          <div className="cat">
+            <input
+              type="radio"
+              checked={cat === "technology"}
+              name="cat"
+              value="technology"
+              id="technology"
+              onChange={(e) => setCat(e.target.value)}
+            />
+            <label htmlFor="technology">Technology</label>
+          </div>
+          <div className="cat">
+            <input
+              type="radio"
+              checked={cat === "cinema"}
+              name="cat"
+              value="cinema"
+              id="cinema"
+              onChange={(e) => setCat(e.target.value)}
+            />
+            <label htmlFor="cinema">Cinema</label>
+          </div>
+          <div className="cat">
+            <input
+              type="radio"
+              checked={cat === "Politics"}
+              name="cat"
+              value="Politics"
+              id="Politics"
+              onChange={(e) => setCat(e.target.value)}
+            />
+            <label htmlFor="cinema">Politics</label>
+          </div>
+          <div className="cat">
+            <input
+              type="radio"
+              checked={cat === "design"}
+              name="cat"
+              value="design"
+              id="design"
+              onChange={(e) => setCat(e.target.value)}
+            />
+            <label htmlFor="design">Design</label>
+          </div>
+          <div className="cat">
+            <input
+              type="radio"
+              checked={cat === "culture"}
+              name="cat"
+              value="culture"
+              id="culture"
+              onChange={(e) => setCat(e.target.value)}
+            />
+            <label htmlFor="design">Culture</label>
+          </div>
+          <div className="cat">
+            <input
+              type="radio"
+              checked={cat === "sports"}
+              name="cat"
+              value="sports"
+              id="sports"
+              onChange={(e) => setCat(e.target.value)}
+            />
+            <label htmlFor="design">Sports</label>
+          </div>
+          <div className="cat">
+            <input
+              type="radio"
+              checked={cat === "food"}
+              name="cat"
+              value="food"
+              id="food"
+              onChange={(e) => setCat(e.target.value)}
+            />
+            <label htmlFor="food">Food</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Write;
