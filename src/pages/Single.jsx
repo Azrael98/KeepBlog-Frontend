@@ -10,6 +10,7 @@ import moment from "moment";
 import { useContext } from "react";
 import { AuthContext } from "../context/authContext";
 import DOMPurify from "dompurify";
+import Comments from "../components/Comments";
 
 const Single = () => {
   const [post, setPost] = useState({});
@@ -22,17 +23,18 @@ const Single = () => {
   const { currentUser } = useContext(AuthContext);
 
   useEffect(() => {
-    fetch(`https://creepy-bonnet-cod.cyclic.app/api/posts/${postId}`)
+    fetch(`${process.env.REACT_APP_SERVER_URL}/api/posts/${postId}`)
       .then((response) => response.json())
       .then((data) => setPost(data))
       .catch((err) => console.log(err));
   }, [postId]);
 
+
   const handleDelete = async () => {
     const ok = window.confirm("Are you sure?");
     if (!ok) return;
 
-    await fetch(`https://creepy-bonnet-cod.cyclic.app/api/posts/${postId}`, {
+    await fetch(`${process.env.REACT_APP_SERVER_URL}/api/posts/${postId}`, {
       method: "DELETE",
       mode: "cors",
       cache: "no-cache",
@@ -129,6 +131,8 @@ const Single = () => {
         </section>
         <Menu cat={post.cat} />
       </div>
+
+      <Comments pid={postId} />
     </>
   );
 };

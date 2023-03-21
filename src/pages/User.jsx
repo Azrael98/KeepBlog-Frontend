@@ -35,7 +35,7 @@ function User() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put("https://creepy-bonnet-cod.cyclic.app/api/users/", inputs);
+      await axios.put(`${process.env.REACT_APP_SERVER_URL}/api/users/`, inputs);
       alert("update successfully");
       setCurrentUser((prev) => ({ ...currentUser, username: inputs.username }));
       navigate("/");

@@ -26,7 +26,7 @@ function Login() {
     const status = await login(inputs);
     if (status === 200) {
       setTimeout(() => {
-        navigate("/")
+        navigate("/");
       }, [3000]);
       toast.success("Logged In Successfully", {
         position: "top-right",
@@ -67,8 +67,6 @@ function Login() {
         pauseOnHover
         theme="light"
       />
-      {/* Same as */}
-      <ToastContainer />
       <div className="px-6 h-full text-gray-800">
         <div className="flex xl:justify-center lg:justify-between justify-center items-center flex-wrap h-full g-6">
           <div className="grow-0 shrink-1 md:shrink-0 basis-auto xl:w-6/12 lg:w-6/12 md:w-9/12 mb-12 md:mb-0">

@@ -15,6 +15,7 @@ const Write = () => {
   const [title, setTitle] = useState(state?.title || "");
   const [file, setFile] = useState(null);
   const [cat, setCat] = useState(state?.cat || "");
+  const [url, setUrl] = useState("");
 
   const imgUrl = state?.img;
 
@@ -22,81 +23,8 @@ const Write = () => {
 
   const handleClick = async (e) => {
     e.preventDefault();
-
-    if (file !== null) {
-      const name = new Date().getTime() + file.name;
-      const storageRef = ref(storage, name);
-      const uploadTask = uploadBytesResumable(storageRef, file);
-
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log("Upload is " + progress + "% done");
-          switch (snapshot.state) {
-            case "paused":
-              console.log("Upload is paused");
-              break;
-            case "running":
-              console.log("Upload is running");
-              break;
-            default:
-              break;
-          }
-        },
-        (error) => {},
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-            try {
-              state
-                ? await fetch(`https://creepy-bonnet-cod.cyclic.app/api/posts/${state.id}`, {
-                    method: "PUT",
-                    mode: "cors",
-                    cache: "no-cache",
-                    credentials: "same-origin",
-                    headers: {
-                      "Content-Type": "application/json",
-                      auth: header,
-                    },
-                    redirect: "follow",
-                    referrerPolicy: "no-referrer",
-                    body: JSON.stringify({
-                      title,
-                      desc: value,
-                      cat,
-                      img: file ? downloadURL : imgUrl,
-                    }),
-                  })
-                : await fetch("https://creepy-bonnet-cod.cyclic.app/api/posts", {
-                    method: "POST",
-                    mode: "cors",
-                    cache: "no-cache",
-                    credentials: "same-origin",
-                    headers: {
-                      "Content-Type": "application/json",
-                      auth: header,
-                    },
-                    redirect: "follow",
-                    referrerPolicy: "no-referrer",
-                    body: JSON.stringify({
-                      title,
-                      desc: value,
-                      cat,
-                      img: file ? downloadURL : "",
-                      date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
-                    }),
-                  });
-              navigate("/");
-            } catch (err) {
-              console.log(err);
-            }
-          });
-        }
-      );
-    }
     state
-      ? await fetch(`https://creepy-bonnet-cod.cyclic.app/api/posts/${state.id}`, {
+      ? await fetch(`${process.env.REACT_APP_SERVER_URL}/api/posts/${state.id}`, {
           method: "PUT",
           mode: "cors",
           cache: "no-cache",
@@ -114,7 +42,7 @@ const Write = () => {
             img: imgUrl,
           }),
         })
-      : await fetch("https://creepy-bonnet-cod.cyclic.app/api/posts", {
+      : await fetch(`${process.env.REACT_APP_SERVER_URL}/api/posts`, {
           method: "POST",
           mode: "cors",
           cache: "no-cache",
@@ -129,12 +57,128 @@ const Write = () => {
             title,
             desc: value,
             cat,
-            img: "",
+            img: url,
             date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
           }),
         });
     navigate("/");
   };
+
+  // const handleClick = async (e) => {
+  //   e.preventDefault();
+
+  //   if (file !== null) {
+  //     const name = new Date().getTime() + file.name;
+  //     const storageRef = ref(storage, name);
+  //     const uploadTask = uploadBytesResumable(storageRef, file);
+
+  //     uploadTask.on(
+  //       "state_changed",
+  //       (snapshot) => {
+  //         const progress =
+  //           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+  //         console.log("Upload is " + progress + "% done");
+  //         switch (snapshot.state) {
+  //           case "paused":
+  //             console.log("Upload is paused");
+  //             break;
+  //           case "running":
+  //             console.log("Upload is running");
+  //             break;
+  //           default:
+  //             break;
+  //         }
+  //       },
+  //       (error) => {},
+  //       () => {
+  //         getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+  //           try {
+  //             state
+  //               ? await fetch(`${process.env.REACT_APP_SERVER_URL}/api/posts/${state.id}`, {
+  //                   method: "PUT",
+  //                   mode: "cors",
+  //                   cache: "no-cache",
+  //                   credentials: "same-origin",
+  //                   headers: {
+  //                     "Content-Type": "application/json",
+  //                     auth: header,
+  //                   },
+  //                   redirect: "follow",
+  //                   referrerPolicy: "no-referrer",
+  //                   body: JSON.stringify({
+  //                     title,
+  //                     desc: value,
+  //                     cat,
+  //                     img: file ? downloadURL : imgUrl,
+  //                   }),
+  //                 })
+  //               : await fetch("${process.env.REACT_APP_SERVER_URL}/api/posts", {
+  //                   method: "POST",
+  //                   mode: "cors",
+  //                   cache: "no-cache",
+  //                   credentials: "same-origin",
+  //                   headers: {
+  //                     "Content-Type": "application/json",
+  //                     auth: header,
+  //                   },
+  //                   redirect: "follow",
+  //                   referrerPolicy: "no-referrer",
+  //                   body: JSON.stringify({
+  //                     title,
+  //                     desc: value,
+  //                     cat,
+  //                     img: file ? downloadURL : "",
+  //                     date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
+  //                   }),
+  //                 });
+  //             navigate("/");
+  //           } catch (err) {
+  //             console.log(err);
+  //           }
+  //         });
+  //       }
+  //     );
+  //   }
+  //   state
+  //     ? await fetch(`${process.env.REACT_APP_SERVER_URL}/api/posts/${state.id}`, {
+  //         method: "PUT",
+  //         mode: "cors",
+  //         cache: "no-cache",
+  //         credentials: "same-origin",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           auth: header,
+  //         },
+  //         redirect: "follow",
+  //         referrerPolicy: "no-referrer",
+  //         body: JSON.stringify({
+  //           title,
+  //           desc: value,
+  //           cat,
+  //           img: imgUrl,
+  //         }),
+  //       })
+  //     : await fetch("${process.env.REACT_APP_SERVER_URL}/api/posts", {
+  //         method: "POST",
+  //         mode: "cors",
+  //         cache: "no-cache",
+  //         credentials: "same-origin",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           auth: header,
+  //         },
+  //         redirect: "follow",
+  //         referrerPolicy: "no-referrer",
+  //         body: JSON.stringify({
+  //           title,
+  //           desc: value,
+  //           cat,
+  //           img: "",
+  //           date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
+  //         }),
+  //       });
+  //   navigate("/");
+  // };
 
   return (
     <div className="add m-25">
@@ -163,16 +207,25 @@ const Write = () => {
           <span>
             <b>Visibility: </b> Public
           </span>
-          <input
+          {/* <input
             style={{ display: "none" }}
             type="file"
             id="file"
             name="file"
             onChange={(e) => setFile(e.target.files[0])}
+          /> */}
+          Image URL
+          <input
+            type="text"
+            onChange={(e) => setUrl(e.target.value)}
+            style={{
+              border: "1px solid black",
+              marginBottom: "5px",
+            }}
           />
-          <label className="file" htmlFor="file">
+          {/* <label className="file" htmlFor="file">
             Upload Image
-          </label>
+          </label> */}
           <div className="buttons">
             <button>Save as a draft</button>
             <button onClick={handleClick}>
