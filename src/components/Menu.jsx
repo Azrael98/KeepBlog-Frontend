@@ -22,7 +22,9 @@ function Menu({ cat }) {
   }, [cat]);
 
   return (
-    <div className="menu">
+    <div className="menu"  style={{
+      paddingLeft:"10px"
+    }}>
       <h1>Other Posts You may like</h1>
       {posts.map((post) => (
         <div className="post" key={post.id}>

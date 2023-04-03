@@ -1,19 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import moment from "moment";
+import { AuthContext } from "../context/authContext";
 
 const Comments = ({ pid }) => {
   const [comments, setComments] = useState();
   const [comment, setComment] = useState();
   const [render, setRender] = useState(0);
-  const [drop, setDrop] = useState(false);
+  // const [drop, setDrop] = useState(false);
   const [error, setError] = useState(false);
   const [edit, setEdit] = useState({
     id: null,
     show: false,
   });
+  const { currentUser } = useContext(AuthContext);
+
   useEffect(() => {
     const fetchComments = async () => {
       const res = await axios.get(
@@ -24,8 +27,8 @@ const Comments = ({ pid }) => {
     fetchComments();
   }, [render]);
 
-  const uid = JSON.parse(localStorage.getItem("user"))?.id;
-  const token = JSON.parse(localStorage.getItem("user"))?.token;
+  const uid = currentUser?.id;
+  const token = currentUser?.token;
 
   const handlePost = async (e) => {
     e.preventDefault();
@@ -46,26 +49,31 @@ const Comments = ({ pid }) => {
           },
         }
       );
-      if (res.status == 200) {
+      if (res.status === 200) {
         setRender(render + 1);
       }
     } catch (error) {
-      toast.error("Unable to Post Comment", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+      toast.error(
+        currentUser === null
+          ? "You need to be logged in."
+          : "Unable to Post Comment",
+        {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        }
+      );
       console.log(error);
     }
   };
 
   const handleEdit = async (id) => {
-    setEdit({id:0, })
+    setEdit({ id: 0, show: false });
     try {
       const res = await axios.put(
         `${process.env.REACT_APP_SERVER_URL}/api/comments/${id}`,
@@ -80,20 +88,25 @@ const Comments = ({ pid }) => {
           },
         }
       );
-      if (res.status == 200) {
+      if (res.status === 200) {
         setRender(render + 1);
       }
     } catch (error) {
-      toast.error("Unable to Edit Comment", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+      toast.error(
+        currentUser === null
+          ? "You need to be logged in."
+          : "Unable to Edit Comment",
+        {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        }
+      );
       console.log(error);
     }
   };
@@ -109,8 +122,8 @@ const Comments = ({ pid }) => {
           },
         }
       );
-      if (res.status == 200) {
-        toast.success("Logged In Successfully", {
+      if (res.status === 200) {
+        toast.success("Comment Deleted", {
           position: "top-right",
           autoClose: 3000,
           hideProgressBar: false,
@@ -123,21 +136,26 @@ const Comments = ({ pid }) => {
         setRender(render + 1);
       }
     } catch (error) {
-      toast.error("Unable to Post Comment", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+      toast.error(
+        currentUser === null
+          ? "You need to be logged in."
+          : "Unable to Post Comment",
+        {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        }
+      );
       console.log(error);
     }
   };
   return (
-    <section className="bg-white dark:bg-gray-900 bottom-0 left-0">
+    <section className="bg-white dark:bg-gray-900">
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -150,10 +168,10 @@ const Comments = ({ pid }) => {
         pauseOnHover
         theme="light"
       />
-      <div className="max-w-2xl mx-auto px-4">
+      <div className="px-4 w-3/5">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">
-            Discussion ({comments?.length})
+            Comments ({comments?.length})
           </h2>
         </div>
         <form className="mb-6">
@@ -228,9 +246,7 @@ const Comments = ({ pid }) => {
                 </button>
               </>
             ) : (
-              <p className="text-gray-500 dark:text-gray-400">
-                {com.comment}
-              </p>
+              <p className="text-gray-500 dark:text-gray-400">{com.comment}</p>
             )}
             {com.uid === uid && (
               <div
@@ -245,9 +261,10 @@ const Comments = ({ pid }) => {
                     paddingRight: "15px",
                     cursor: "pointer",
                   }}
-                  onClick={() => {setEdit({ id: com.id, show: !edit.show })
-                  setComment(com.comment)
-                }}
+                  onClick={() => {
+                    setEdit({ id: com.id, show: !edit.show });
+                    setComment(com.comment);
+                  }}
                 >
                   Edit
                 </span>

@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { AuthContext } from "../context/authContext";
 
 function Register() {
   const [inputs, setInputs] = useState({
@@ -18,6 +19,12 @@ function Register() {
   const [err, setErr] = useState(null);
 
   const navigate = useNavigate();
+
+  const { currentUser } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (currentUser !== null) navigate("/");
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

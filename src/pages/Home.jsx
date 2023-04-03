@@ -16,7 +16,6 @@ function Home() {
   const cat = useLocation().search;
   const navigate = useNavigate();
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -130,9 +129,13 @@ function Home() {
           <div className="w-full bg-white shadow flex flex-col my-4 p-6">
             <p className="text-xl font-semibold pb-5">About Us</p>
             <p className="pb-2">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas
-              mattis est eu odio sagittis tristique. Vestibulum ut finibus leo.
-              In hac habitasse platea dictumst.
+              Keep your thoughts alive! Create your own blog with KeepBlog and
+              share with the world. From travel to tech, food to fitness,
+              KeepBlog has something for everyone. Get started today and join
+              the ever-growing community of bloggers who are telling their
+              stories, engaging in lively discussions & learning from each
+              other. With KeepBlog, you can give your thoughts a voice - change
+              the world one blog post at a time!
             </p>
             <Link
               to=""

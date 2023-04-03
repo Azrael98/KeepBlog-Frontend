@@ -1,15 +1,18 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-
 import { useLocation, useNavigate } from "react-router-dom";
 import moment from "moment";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "../firebase";
+import axios from "axios";
+import "../css/write.css";
+import { AuthContext } from "../context/authContext";
 
 const Write = () => {
-  const header = "Bearer " + JSON.parse(localStorage.getItem("user")).token;
+  const { currentUser } = useContext(AuthContext);
 
+  const [header, setHeader] = useState();
   const state = useLocation().state;
   const [value, setValue] = useState(state?.desc || "");
   const [title, setTitle] = useState(state?.title || "");
@@ -21,46 +24,45 @@ const Write = () => {
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (currentUser === null) navigate("/");
+    else setHeader("Bearer " + currentUser.token);
+  }, []);
+
   const handleClick = async (e) => {
     e.preventDefault();
     state
-      ? await fetch(`${process.env.REACT_APP_SERVER_URL}/api/posts/${state.id}`, {
-          method: "PUT",
-          mode: "cors",
-          cache: "no-cache",
-          credentials: "same-origin",
-          headers: {
-            "Content-Type": "application/json",
-            auth: header,
-          },
-          redirect: "follow",
-          referrerPolicy: "no-referrer",
-          body: JSON.stringify({
+      ? await axios.put(
+          `${process.env.REACT_APP_SERVER_URL}/api/posts/${state.id}`,
+          {
             title,
             desc: value,
             cat,
             img: imgUrl,
-          }),
-        })
-      : await fetch(`${process.env.REACT_APP_SERVER_URL}/api/posts`, {
-          method: "POST",
-          mode: "cors",
-          cache: "no-cache",
-          credentials: "same-origin",
-          headers: {
-            "Content-Type": "application/json",
-            auth: header,
           },
-          redirect: "follow",
-          referrerPolicy: "no-referrer",
-          body: JSON.stringify({
+          {
+            headers: {
+              "Content-Type": "application/json",
+              auth: header,
+            },
+          }
+        )
+      : await axios.post(
+          `${process.env.REACT_APP_SERVER_URL}/api/posts`,
+          {
             title,
             desc: value,
             cat,
             img: url,
             date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
-          }),
-        });
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              auth: header,
+            },
+          }
+        );
     navigate("/");
   };
 

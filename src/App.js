@@ -1,8 +1,4 @@
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Outlet,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Write from "./pages/Write";
@@ -40,7 +36,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/write",
-        element: currentUser === null ? <Home /> : <Write />,
+        element: <Write />,
       },
       {
         path: "/user",
@@ -50,18 +46,18 @@ const router = createBrowserRouter([
   },
   {
     path: "/register",
-    element: currentUser === null ? <Register /> : <Layout />,
+    element: <Register />,
   },
   {
     path: "/login",
-    element: currentUser === null ? <Login /> : <Layout />,
+    element: <Login />,
   },
 ]);
 
 function App() {
   return (
     <div className="app">
-      <div className="container">
+      <div className="w-full">
         <RouterProvider router={router} />
       </div>
     </div>
