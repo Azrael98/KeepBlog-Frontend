@@ -27,12 +27,12 @@ function Menu({ cat }) {
     }}>
       <h1>Other Posts You may like</h1>
       {posts.map((post) => (
-        <div className="post" key={post.id}>
+        <div className="post" key={post._id}>
           <img src={post.img} alt="" />
           <h2>{post.title}</h2>
           <button
             onClick={() => {
-              navigate(`/post/${post.id}`);
+              navigate(`/post/${post._id}`);
             }}
           >
             Read more

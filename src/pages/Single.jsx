@@ -63,6 +63,8 @@ const Single = () => {
     });
   };
 
+  console.log(post)
+
   return (
     <div className="flex flex-col" ref={ref}>
       <ToastContainer
@@ -102,7 +104,7 @@ const Single = () => {
                 <p href="#" className="text-sm pb-8">
                   Posted {moment(post.date).fromNow()}
                 </p>
-                {currentUser?.username === post?.username && (
+                {currentUser?.user?._id === post?.uid && (
                   <>
                     <Link to={`/write?edit=2`} state={post}>
                       <img

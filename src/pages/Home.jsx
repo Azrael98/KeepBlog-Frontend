@@ -39,6 +39,7 @@ function Home() {
     return str.substr(0, 200);
   };
 
+
   return (
     <div className="home">
       <label
@@ -92,7 +93,7 @@ function Home() {
         )}
         <section className="w-full md:w-2/3 flex flex-col items-center px-3">
           {filteredItems.map((post) => (
-            <article className="flex flex-col shadow my-4" key={post.id}>
+            <article className="flex flex-col shadow my-4" key={post._id}>
               <div className="hover:opacity-75">
                 <img src={post.img} alt="" id="home-img" />
               </div>
@@ -116,7 +117,7 @@ function Home() {
                   {getText(post.desc)}...
                 </Link>
                 <button
-                  onClick={() => navigate(`/post/${post.id}`)}
+                  onClick={() => navigate(`/post/${post._id}`)}
                   className="uppercase text-gray-800 hover:text-black"
                 >
                   Continue Reading <i className="fas fa-arrow-right"></i>

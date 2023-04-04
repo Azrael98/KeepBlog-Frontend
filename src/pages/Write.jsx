@@ -33,7 +33,7 @@ const Write = () => {
     e.preventDefault();
     state
       ? await axios.put(
-          `${process.env.REACT_APP_SERVER_URL}/api/posts/${state.id}`,
+          `${process.env.REACT_APP_SERVER_URL}/api/posts/${state._id}`,
           {
             title,
             desc: value,

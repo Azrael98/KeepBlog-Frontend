@@ -27,8 +27,10 @@ const Comments = ({ pid }) => {
     fetchComments();
   }, [render]);
 
-  const uid = currentUser?.id;
+
+  const uid = currentUser?.user._id;
   const token = currentUser?.token;
+
 
   const handlePost = async (e) => {
     e.preventDefault();
@@ -211,7 +213,7 @@ const Comments = ({ pid }) => {
         {comments?.map((com) => (
           <article
             className="p-6 mb-6 text-base bg-white rounded-lg dark:bg-gray-900 border border-indigo-600"
-            key={com.id}
+            key={com._id}
           >
             <footer className="flex justify-between items-center mb-2">
               <div className="flex items-center">
@@ -221,10 +223,11 @@ const Comments = ({ pid }) => {
                     src="https://flowbite.com/docs/images/people/profile-picture-2.jpg"
                     alt="Michael Gough"
                   />
-                  {com.username}
+                  {com.uid.username}
                 </p>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  {moment(com?.date).calendar()}
+                  {/* {moment(com?.date).calendar()} */}
+                  {new Date(com.updatedAt).toLocaleString()}
                 </p>
               </div>
             </footer>
@@ -248,7 +251,7 @@ const Comments = ({ pid }) => {
             ) : (
               <p className="text-gray-500 dark:text-gray-400">{com.comment}</p>
             )}
-            {com.uid === uid && (
+            {com.uid._id === uid && (
               <div
                 style={{
                   marginTop: "15px",
