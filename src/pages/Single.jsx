@@ -63,8 +63,6 @@ const Single = () => {
     });
   };
 
-  console.log(post)
-
   return (
     <div className="flex flex-col" ref={ref}>
       <ToastContainer
@@ -102,7 +100,7 @@ const Single = () => {
               </Link>
               <div className="edit flex">
                 <p href="#" className="text-sm pb-8">
-                  Posted {moment(post.date).fromNow()}
+                  Posted {moment(post.updatedAt).fromNow()}
                 </p>
                 {currentUser?.user?._id === post?.uid && (
                   <>

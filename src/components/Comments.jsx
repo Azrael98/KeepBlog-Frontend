@@ -26,10 +26,8 @@ const Comments = ({ pid }) => {
     fetchComments();
   }, [render]);
 
-
   const uid = currentUser?.user._id;
   const token = currentUser?.token;
-
 
   const handlePost = async (e) => {
     e.preventDefault();
@@ -41,7 +39,6 @@ const Comments = ({ pid }) => {
           comment,
           uid,
           pid,
-          date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
         },
         {
           headers: {
@@ -80,7 +77,6 @@ const Comments = ({ pid }) => {
         `${process.env.REACT_APP_SERVER_URL}/api/comments/${id}`,
         {
           comment,
-          date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
         },
         {
           headers: {
@@ -219,18 +215,22 @@ const Comments = ({ pid }) => {
                 <p className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
                   <img
                     className="mr-2 w-6 h-6 rounded-full"
-                    src="https://flowbite.com/docs/images/people/profile-picture-2.jpg"
-                    alt="Michael Gough"
+                    src={
+                      com.img === undefined
+                        ? "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
+                        : com.img
+                    }
+                    alt="icon"
                   />
                   {com.uid.username}
                 </p>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
                   {/* {moment(com?.date).calendar()} */}
-                  {new Date(com.updatedAt).toLocaleString()}
+                  {moment(com.updatedAt).fromNow()}
                 </p>
               </div>
             </footer>
-            {edit.show && edit.id === com.id ? (
+            {edit.show && edit.id === com._id ? (
               <>
                 <textarea
                   id="chat"
@@ -242,7 +242,7 @@ const Comments = ({ pid }) => {
                 <button
                   type="submit"
                   className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
-                  onClick={() => handleEdit(com.id)}
+                  onClick={() => handleEdit(com._id)}
                 >
                   Edit comment
                 </button>
@@ -264,7 +264,7 @@ const Comments = ({ pid }) => {
                     cursor: "pointer",
                   }}
                   onClick={() => {
-                    setEdit({ id: com.id, show: !edit.show });
+                    setEdit({ id: com._id, show: !edit.show });
                     setComment(com.comment);
                   }}
                 >
@@ -276,7 +276,7 @@ const Comments = ({ pid }) => {
                     color: "blue",
                     cursor: "pointer",
                   }}
-                  onClick={() => handleDelete(com.id)}
+                  onClick={() => handleDelete(com._id)}
                 >
                   Delete
                 </span>

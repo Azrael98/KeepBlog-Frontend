@@ -39,7 +39,6 @@ function Home() {
     return str.substr(0, 200);
   };
 
-
   return (
     <div className="home">
       <label
@@ -111,7 +110,7 @@ function Home() {
                   {post.title}
                 </Link>
                 <p className="text-sm pb-3">
-                  Posted {moment(post.date).calendar()}
+                  Posted {moment(post.updatedAt).fromNow()}
                 </p>
                 <Link to="" className="pb-6">
                   {getText(post.desc)}...
@@ -138,12 +137,6 @@ function Home() {
               other. With KeepBlog, you can give your thoughts a voice - change
               the world one blog post at a time!
             </p>
-            <Link
-              to=""
-              className="w-full bg-blue-800 text-white font-bold text-sm uppercase rounded hover:bg-blue-700 flex items-center justify-center px-2 py-3 mt-4"
-            >
-              Get to know us
-            </Link>
           </div>
         </aside>
       </div>

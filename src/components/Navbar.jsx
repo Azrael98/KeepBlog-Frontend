@@ -35,15 +35,6 @@ function Navbar() {
                   Home
                 </Link>
               </li>
-              <li>
-                <Link
-                  className="hover:text-gray-200 hover:underline px-4"
-                  to="/about"
-                >
-                  About
-                </Link>
-              </li>
-
               {currentUser ? (
                 <>
                   <li>
