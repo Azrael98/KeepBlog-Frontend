@@ -3,8 +3,6 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import moment from "moment";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { storage } from "../firebase";
 import axios from "axios";
 import "../css/write.css";
 import { AuthContext } from "../context/authContext";
@@ -66,122 +64,6 @@ const Write = () => {
     navigate("/");
   };
 
-  // const handleClick = async (e) => {
-  //   e.preventDefault();
-
-  //   if (file !== null) {
-  //     const name = new Date().getTime() + file.name;
-  //     const storageRef = ref(storage, name);
-  //     const uploadTask = uploadBytesResumable(storageRef, file);
-
-  //     uploadTask.on(
-  //       "state_changed",
-  //       (snapshot) => {
-  //         const progress =
-  //           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-  //         console.log("Upload is " + progress + "% done");
-  //         switch (snapshot.state) {
-  //           case "paused":
-  //             console.log("Upload is paused");
-  //             break;
-  //           case "running":
-  //             console.log("Upload is running");
-  //             break;
-  //           default:
-  //             break;
-  //         }
-  //       },
-  //       (error) => {},
-  //       () => {
-  //         getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-  //           try {
-  //             state
-  //               ? await fetch(`${process.env.REACT_APP_SERVER_URL}/api/posts/${state.id}`, {
-  //                   method: "PUT",
-  //                   mode: "cors",
-  //                   cache: "no-cache",
-  //                   credentials: "same-origin",
-  //                   headers: {
-  //                     "Content-Type": "application/json",
-  //                     auth: header,
-  //                   },
-  //                   redirect: "follow",
-  //                   referrerPolicy: "no-referrer",
-  //                   body: JSON.stringify({
-  //                     title,
-  //                     desc: value,
-  //                     cat,
-  //                     img: file ? downloadURL : imgUrl,
-  //                   }),
-  //                 })
-  //               : await fetch("${process.env.REACT_APP_SERVER_URL}/api/posts", {
-  //                   method: "POST",
-  //                   mode: "cors",
-  //                   cache: "no-cache",
-  //                   credentials: "same-origin",
-  //                   headers: {
-  //                     "Content-Type": "application/json",
-  //                     auth: header,
-  //                   },
-  //                   redirect: "follow",
-  //                   referrerPolicy: "no-referrer",
-  //                   body: JSON.stringify({
-  //                     title,
-  //                     desc: value,
-  //                     cat,
-  //                     img: file ? downloadURL : "",
-  //                     date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
-  //                   }),
-  //                 });
-  //             navigate("/");
-  //           } catch (err) {
-  //             console.log(err);
-  //           }
-  //         });
-  //       }
-  //     );
-  //   }
-  //   state
-  //     ? await fetch(`${process.env.REACT_APP_SERVER_URL}/api/posts/${state.id}`, {
-  //         method: "PUT",
-  //         mode: "cors",
-  //         cache: "no-cache",
-  //         credentials: "same-origin",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           auth: header,
-  //         },
-  //         redirect: "follow",
-  //         referrerPolicy: "no-referrer",
-  //         body: JSON.stringify({
-  //           title,
-  //           desc: value,
-  //           cat,
-  //           img: imgUrl,
-  //         }),
-  //       })
-  //     : await fetch("${process.env.REACT_APP_SERVER_URL}/api/posts", {
-  //         method: "POST",
-  //         mode: "cors",
-  //         cache: "no-cache",
-  //         credentials: "same-origin",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           auth: header,
-  //         },
-  //         redirect: "follow",
-  //         referrerPolicy: "no-referrer",
-  //         body: JSON.stringify({
-  //           title,
-  //           desc: value,
-  //           cat,
-  //           img: "",
-  //           date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
-  //         }),
-  //       });
-  //   navigate("/");
-  // };
-
   return (
     <div className="add m-25">
       <div className="content">
@@ -209,13 +91,6 @@ const Write = () => {
           <span>
             <b>Visibility: </b> Public
           </span>
-          {/* <input
-            style={{ display: "none" }}
-            type="file"
-            id="file"
-            name="file"
-            onChange={(e) => setFile(e.target.files[0])}
-          /> */}
           Image URL
           <input
             type="text"
@@ -225,11 +100,7 @@ const Write = () => {
               marginBottom: "5px",
             }}
           />
-          {/* <label className="file" htmlFor="file">
-            Upload Image
-          </label> */}
           <div className="buttons">
-            <button>Save as a draft</button>
             <button onClick={handleClick}>
               {state ? "Update" : "Publish"}
             </button>

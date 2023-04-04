@@ -9,7 +9,6 @@ const Comments = ({ pid }) => {
   const [comments, setComments] = useState();
   const [comment, setComment] = useState();
   const [render, setRender] = useState(0);
-  // const [drop, setDrop] = useState(false);
   const [error, setError] = useState(false);
   const [edit, setEdit] = useState({
     id: null,
