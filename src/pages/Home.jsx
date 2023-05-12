@@ -1,4 +1,5 @@
 import axios from "axios";
+import Loading from "../components/Loading";
 import React, { useEffect, useState, useMemo } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import moment from "moment";
@@ -6,6 +7,7 @@ import moment from "moment";
 function Home() {
   const [posts, setPosts] = useState([]);
   const [query, setQuery] = useState("");
+  const [show, setShow] = useState(true);
 
   const filteredItems = useMemo(() => {
     return posts.filter((item) => {
@@ -26,6 +28,7 @@ function Home() {
       } catch (error) {
         console.log(error);
       }
+      setShow(false)
     };
     fetchData();
   }, [cat]);
@@ -39,7 +42,9 @@ function Home() {
     return str.substr(0, 200);
   };
 
-  return (
+  return show ? (
+    <Loading />
+  ) : (
     <div className="home">
       <label
         htmlFor="default-search"
@@ -76,7 +81,7 @@ function Home() {
       </div>
       <div className="container mx-auto flex flex-wrap py-6">
         {filteredItems.length === 0 && (
-          <section className="flex items-center h-full p-16 dark:bg-gray-900 dark:text-gray-100">
+          <section className="flex items-center h-full p-16 dark:bg-gray-900 dark:text-gray-100 cursor-pointer">
             <div className="container flex flex-col items-center justify-center px-5 mx-auto my-8">
               <div className="max-w-md text-center">
                 <p className="text-2xl font-semibold md:text-3xl">

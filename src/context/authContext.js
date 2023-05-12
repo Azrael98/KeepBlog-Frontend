@@ -22,8 +22,12 @@ export const AuthContexProvider = ({ children }) => {
         body: JSON.stringify(inputs),
       }
     );
-    const res = await response.json();
-    setCurrentUser(res);
+    if (response.status !== 200) {
+      setCurrentUser(null);
+    } else {
+      const res = await response.json();
+      setCurrentUser(res);
+    }
     return response.status;
   };
 

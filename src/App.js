@@ -1,14 +1,15 @@
+import React, { Suspense } from "react";
+import Loading from "./components/Loading";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
-import Register from "./pages/Register";
-import Login from "./pages/Login";
-import Write from "./pages/Write";
-import Single from "./pages/Single";
-import Home from "./pages/Home";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-
 import "./style.scss";
-import User from "./pages/User";
+const Register = React.lazy(() => import("./pages/Register"));
+const Login = React.lazy(() => import("./pages/Login"));
+const Write = React.lazy(() => import("./pages/Write"));
+const Single = React.lazy(() => import("./pages/Single"));
+const Home = React.lazy(() => import("./pages/Home"));
+const Navbar = React.lazy(() => import("./components/Navbar"));
+const Footer = React.lazy(() => import("./components/Footer"));
+const User = React.lazy(() => import("./pages/User"));
 
 const Layout = () => {
   return (
@@ -19,7 +20,7 @@ const Layout = () => {
     </>
   );
 };
-const currentUser = JSON.parse(localStorage.getItem("user")) || null;
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -58,7 +59,9 @@ function App() {
   return (
     <div className="app">
       <div className="w-full">
-        <RouterProvider router={router} />
+        <Suspense fallback={<Loading />}>
+          <RouterProvider router={router} />
+        </Suspense>
       </div>
     </div>
   );

@@ -3,9 +3,11 @@ import axios from "axios";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Loading from "./Loading";
 
 function Menu({ cat }) {
   const [posts, setPosts] = useState([]);
+  const [show, setShow] = useState(true);
   const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
@@ -14,6 +16,7 @@ function Menu({ cat }) {
           `${process.env.REACT_APP_SERVER_URL}/api/posts/?cat=${cat}`
         );
         setPosts(res.data);
+        setShow(false);
       } catch (error) {
         console.log(error);
       }
@@ -21,10 +24,15 @@ function Menu({ cat }) {
     fetchData();
   }, [cat]);
 
-  return (
-    <div className="menu"  style={{
-      paddingLeft:"10px"
-    }}>
+  return show ? (
+    <Loading />
+  ) : (
+    <div
+      className="menu"
+      style={{
+        paddingLeft: "10px",
+      }}
+    >
       <h1>Other Posts You may like</h1>
       {posts.map((post) => (
         <div className="post" key={post._id}>

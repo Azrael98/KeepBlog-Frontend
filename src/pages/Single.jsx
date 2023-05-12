@@ -11,6 +11,7 @@ import { useContext } from "react";
 import { AuthContext } from "../context/authContext";
 import DOMPurify from "dompurify";
 import Comments from "../components/Comments";
+import Loading from "../components/Loading";
 
 const Single = () => {
   const [post, setPost] = useState({});
@@ -23,15 +24,21 @@ const Single = () => {
 
   const { currentUser } = useContext(AuthContext);
 
+  const [show, setShow] = useState(true);
+
   useEffect(() => {
-    ref.current.scrollIntoView({
-      behavior: "smooth",
-      block: "end",
-      inline: "nearest",
-    });
+    // show &&
+    //   ref.current.scrollIntoView({
+    //     behavior: "smooth",
+    //     block: "end",
+    //     inline: "nearest",
+    //   });
     fetch(`${process.env.REACT_APP_SERVER_URL}/api/posts/${postId}`)
       .then((response) => response.json())
-      .then((data) => setPost(data))
+      .then((data) => {
+        setPost(data);
+        setShow(false);
+      })
       .catch((err) => console.log(err));
   }, [postId]);
 
@@ -63,7 +70,9 @@ const Single = () => {
     });
   };
 
-  return (
+  return show ? (
+    <Loading />
+  ) : (
     <div className="flex flex-col" ref={ref}>
       <ToastContainer
         position="top-right"

@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import moment from "moment";
 import { AuthContext } from "../context/authContext";
 
+
 const Comments = ({ pid }) => {
   const [comments, setComments] = useState();
   const [comment, setComment] = useState();
@@ -24,7 +25,8 @@ const Comments = ({ pid }) => {
       setComments(res.data);
     };
     fetchComments();
-  }, [render]);
+  }, [render, pid]);
+
 
   const uid = currentUser?.user._id;
   const token = currentUser?.token;
