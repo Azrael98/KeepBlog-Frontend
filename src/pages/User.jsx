@@ -8,6 +8,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ChangePasswordModal from "../components/ChangePasswordModal";
 import Loading from "../components/Loading";
+import { buttonChange, editPass, emailChange, thClass, theadClass, userChange } from "./tailwing-classes";
 
 export default function User() {
   const { currentUser } = useContext(AuthContext);
@@ -19,7 +20,7 @@ export default function User() {
     email: "",
   });
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user")) || null;
+  const user = JSON.parse(sessionStorage.getItem("user")) || null;
   const token = user?.token;
 
   const handleDelete = async (postId) => {
@@ -89,7 +90,7 @@ export default function User() {
     );
     if (res.status === 200) {
       const { password, ...other } = res.data;
-      localStorage.setItem("user", JSON.stringify({ user: other, token }));
+      sessionStorage.setItem("user", JSON.stringify({ user: other, token }));
       toast.success("Profile Updated Successfully", {
         position: "top-right",
         autoClose: 5000,
@@ -149,7 +150,7 @@ export default function User() {
                   name="username"
                   id="username"
                   onChange={handleChange}
-                  className="bg-gray-100 border border-gray-200 rounded py-1 px-3 block focus:ring-blue-500 focus:border-blue-500 text-gray-700 w-full"
+                  className={userChange}
                   placeholder={data?.profile.username}
                 />
               </div>
@@ -165,7 +166,7 @@ export default function User() {
                   name="email"
                   id="email"
                   onChange={handleChange}
-                  className="bg-gray-100 border border-gray-200 rounded py-1 px-3 block focus:ring-blue-500 focus:border-blue-500 text-gray-700 w-full"
+                  className={emailChange}
                   placeholder={data?.profile.email}
                 />
               </div>
@@ -173,7 +174,7 @@ export default function User() {
             <div className="space-x-4 mt-8">
               <button
                 type="submit"
-                className="px-8 py-3 text-white bg-blue-600 rounded focus:outline-none disabled:opacity-25"
+                className={buttonChange}
                 disabled={
                   userData.username === data?.profile.username &&
                   userData.email === data?.profile.email
@@ -183,7 +184,7 @@ export default function User() {
                 Edit
               </button>
               <button
-                className="px-8 py-3 text-white bg-blue-600 rounded focus:outline-none disabled:opacity-25"
+                className={editPass}
                 onClick={(e) => {
                   e.preventDefault();
                   setShowModal(!showModal);
@@ -204,7 +205,7 @@ export default function User() {
         <h1 className="font-medium text-3xl">Your Posts</h1>
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
           <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <thead className={theadClass}>
               <tr>
                 <th scope="col" className="px-6 py-3">
                   Title
@@ -229,7 +230,7 @@ export default function User() {
                   <Link to={`/post/${post._id}`}>
                     <th
                       scope="row"
-                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                      className={thClass}
                     >
                       {post.title}
                     </th>
@@ -266,13 +267,3 @@ export default function User() {
   );
 }
 
-// import React from 'react'
-// import SingleBlogPost from '../components/SingleBlogPost'
-
-// const User = () => {
-//   return (
-//     <SingleBlogPost/>
-//   )
-// }
-
-// export default User

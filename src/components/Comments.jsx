@@ -4,6 +4,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import moment from "moment";
 import { AuthContext } from "../context/authContext";
+import { articleClass, commentClass, commentForm, commentSubmit, editComment, editSubmit, errorDiv, footerPClass } from "./tailwind-component";
 
 
 const Comments = ({ pid }) => {
@@ -174,14 +175,14 @@ const Comments = ({ pid }) => {
           </h2>
         </div>
         <form className="mb-6">
-          <div className="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+          <div className={commentForm}>
             <label htmlFor="comment" className="sr-only">
               Your comment
             </label>
             <textarea
               id="comment"
               rows={6}
-              className="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 focus:outline-none dark:text-white dark:placeholder-gray-400 dark:bg-gray-800"
+              className={commentClass}
               placeholder="Write a comment..."
               required=""
               defaultValue={""}
@@ -193,7 +194,7 @@ const Comments = ({ pid }) => {
           </div>
           {error && (
             <div
-              className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+              className={errorDiv}
               role="alert"
             >
               <span className="font-medium">Unable to Post Comment</span>
@@ -201,7 +202,7 @@ const Comments = ({ pid }) => {
           )}
           <button
             type="submit"
-            className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
+            className={commentSubmit}
             onClick={handlePost}
           >
             Post comment
@@ -209,12 +210,12 @@ const Comments = ({ pid }) => {
         </form>
         {comments?.map((com) => (
           <article
-            className="p-6 mb-6 text-base bg-white rounded-lg dark:bg-gray-900 border border-indigo-600"
+            className={articleClass}
             key={com._id}
           >
             <footer className="flex justify-between items-center mb-2">
               <div className="flex items-center">
-                <p className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
+                <p className={footerPClass}>
                   <img
                     className="mr-2 w-6 h-6 rounded-full"
                     src={
@@ -237,13 +238,13 @@ const Comments = ({ pid }) => {
                 <textarea
                   id="chat"
                   rows="1"
-                  className="block my-2 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className={editComment}
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
                 ></textarea>
                 <button
                   type="submit"
-                  className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
+                  className={editSubmit}
                   onClick={() => handleEdit(com._id)}
                 >
                   Edit comment

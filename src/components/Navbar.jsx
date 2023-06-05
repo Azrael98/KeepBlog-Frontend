@@ -4,6 +4,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthContext } from "../context/authContext";
 import Logo from "../img/logo2.png";
+import { catClass, ulClass } from "./tailwind-component";
 
 function Navbar() {
   const { currentUser, logout } = useContext(AuthContext);
@@ -26,7 +27,7 @@ function Navbar() {
       <nav className="w-full py-4 bg-blue-800 shadow sticky top-0 z-10">
         <div className="w-full container mx-auto flex flex-wrap items-center justify-between">
           <nav>
-            <ul className="flex items-center justify-between font-bold text-sm text-white uppercase no-underline">
+            <ul className={ulClass}>
               <li>
                 <Link
                   className="hover:text-gray-200 hover:underline px-4"
@@ -131,7 +132,7 @@ function Navbar() {
           </Link>
         </div>
         <div className="w-full flex-grow sm:flex sm:items-center sm:w-auto ">
-          <div className="w-full container mx-auto flex flex-col sm:flex-row items-center justify-center text-sm font-bold uppercase mt-0 px-6 py-2">
+          <div className={catClass}>
             <Link
               to="/?cat=art"
               className="hover:bg-gray-400 rounded py-2 px-4 mx-2"

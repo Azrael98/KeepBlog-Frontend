@@ -3,6 +3,7 @@ import Loading from "../components/Loading";
 import React, { useEffect, useState, useMemo } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import moment from "moment";
+import { search, searchIcon, searchInput } from "./tailwing-classes";
 
 function Home() {
   const [posts, setPosts] = useState([]);
@@ -48,12 +49,12 @@ function Home() {
     <div className="home">
       <label
         htmlFor="default-search"
-        className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-gray-300"
+        className={search}
       >
         Search
       </label>
       <div className="relative">
-        <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+        <div className={searchIcon}>
           <svg
             aria-hidden="true"
             className="w-5 h-5 text-gray-500 dark:text-gray-400"
@@ -75,7 +76,7 @@ function Home() {
           onChange={(e) => setQuery(e.target.value)}
           type="text"
           id="default-search"
-          className="block p-4 pl-10 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          className={searchInput}
           placeholder="What are you looking for?"
         />
       </div>

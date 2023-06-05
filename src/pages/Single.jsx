@@ -27,12 +27,7 @@ const Single = () => {
   const [show, setShow] = useState(true);
 
   useEffect(() => {
-    // show &&
-    //   ref.current.scrollIntoView({
-    //     behavior: "smooth",
-    //     block: "end",
-    //     inline: "nearest",
-    //   });
+
     fetch(`${process.env.REACT_APP_SERVER_URL}/api/posts/${postId}`)
       .then((response) => response.json())
       .then((data) => {
@@ -86,7 +81,6 @@ const Single = () => {
         pauseOnHover
         theme="light"
       />
-      {/* Same as */}
       <ToastContainer />
       <div className="container flex flex-wrap py-6">
         <section className="w-full md:w-2/3 flex flex-col items-center px-3">
