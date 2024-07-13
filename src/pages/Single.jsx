@@ -22,7 +22,7 @@ const Single = () => {
   const { currentUser } = useContext(AuthContext);
 
   useEffect(() => {
-    fetch(`https://creepy-bonnet-cod.cyclic.app/api/posts/${postId}`)
+    fetch(`${process.env.REACT_APP_API}/api/posts/${postId}`)
       .then((response) => response.json())
       .then((data) => setPost(data))
       .catch((err) => console.log(err));
@@ -32,7 +32,7 @@ const Single = () => {
     const ok = window.confirm("Are you sure?");
     if (!ok) return;
 
-    await fetch(`https://creepy-bonnet-cod.cyclic.app/api/posts/${postId}`, {
+    await fetch(`${process.env.REACT_APP_API}/api/posts/${postId}`, {
       method: "DELETE",
       mode: "cors",
       cache: "no-cache",

@@ -23,7 +23,7 @@ function Register() {
     e.preventDefault();
     try {
       await axios.post(
-        "https://creepy-bonnet-cod.cyclic.app/api/auth/register",
+        `${process.env.REACT_APP_API}/api/auth/register`,
         inputs
       );
       setTimeout(() => {

@@ -20,7 +20,7 @@ function Home() {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          `https://creepy-bonnet-cod.cyclic.app/api/posts/${cat}`
+          `${process.env.REACT_APP_API}/api/posts/${cat}`
         );
         setPosts(res.data);
       } catch (error) {

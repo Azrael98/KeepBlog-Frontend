@@ -50,7 +50,7 @@ const Write = () => {
           getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
             try {
               state
-                ? await fetch(`https://creepy-bonnet-cod.cyclic.app/api/posts/${state.id}`, {
+                ? await fetch(`${process.env.REACT_APP_API}/api/posts/${state.id}`, {
                     method: "PUT",
                     mode: "cors",
                     cache: "no-cache",
@@ -68,7 +68,7 @@ const Write = () => {
                       img: file ? downloadURL : imgUrl,
                     }),
                   })
-                : await fetch("https://creepy-bonnet-cod.cyclic.app/api/posts", {
+                : await fetch(`${process.env.REACT_APP_API}/api/posts`, {
                     method: "POST",
                     mode: "cors",
                     cache: "no-cache",
@@ -96,7 +96,7 @@ const Write = () => {
       );
     }
     state
-      ? await fetch(`https://creepy-bonnet-cod.cyclic.app/api/posts/${state.id}`, {
+      ? await fetch(`${process.env.REACT_APP_API}/api/posts/${state.id}`, {
           method: "PUT",
           mode: "cors",
           cache: "no-cache",
@@ -114,7 +114,7 @@ const Write = () => {
             img: imgUrl,
           }),
         })
-      : await fetch("https://creepy-bonnet-cod.cyclic.app/api/posts", {
+      : await fetch(`${process.env.REACT_APP_API}/api/posts`, {
           method: "POST",
           mode: "cors",
           cache: "no-cache",

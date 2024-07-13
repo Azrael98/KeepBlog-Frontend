@@ -8,7 +8,7 @@ export const AuthContexProvider = ({ children }) => {
   );
   const login = async (inputs) => {
     const response = await fetch(
-      "https://creepy-bonnet-cod.cyclic.app/api/auth/login",
+      `${process.env.REACT_APP_API}/api/auth/login`,
       {
         method: "POST",
         mode: "cors",

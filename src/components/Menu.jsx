@@ -11,7 +11,7 @@ function Menu({ cat }) {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          `https://creepy-bonnet-cod.cyclic.app/api/posts/?cat=${cat}`
+          `${process.env.REACT_APP_API}/api/posts/?cat=${cat}`
         );
         setPosts(res.data);
       } catch (error) {
